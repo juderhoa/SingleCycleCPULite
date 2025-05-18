@@ -1,0 +1,44 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity ALU is
+port (port1, port2: in std_logic_vector(31 downto 0);
+clk_alu: in std_logic;
+ALUcontrol: in std_logic_vector(3 downto 0);
+flags_alu: out std_logic_vector(3 downto 0); -- N, Z, C, V in order
+ALUout: out std_logic_vector(31 downto 0);
+shiftamt: in std_logic_vector(4 downto 0));
+end ALU;
+
+architecture Behavioral of ALU is
+
+signal c1, asr: std_logic_vector(32 downto 0);
+begin
+--to_integer(signed(port2)) => signed(port1(31)),
+with ALUcontrol select
+c1 <= std_logic_vector((port1(31) & signed(port1)) and (port2(31) & signed(port2))) when "0000",
+std_logic_vector((port1(31) & signed(port1)) or (port2(31) & signed(port2))) when "0001",
+std_logic_vector((port1(31) & signed(port1)) + (port2(31) & signed(port2))) when "0010",
+std_logic_vector(shift_left(port2(31) & signed(port2), to_integer(unsigned(shiftamt)))) when "1000",
+std_logic_vector(shift_right(port1(31) & signed(port1), to_integer(port2(31) & signed(port2)))) when "0100",
+std_logic_vector((port1(31) & signed(port1)) - (port2(31) & signed(port2))) when "0110",
+std_logic_vector((port1(31) & signed(port1)) xor (port2(31) & signed(port2))) when "0011",
+std_logic_vector(shift_left(port1(31) & signed(port1), to_integer(port2(31) & signed(port2)))) when "1001",
+std_logic_vector(resize(signed(std_logic_vector((port1(31 downto to_integer(signed(port2)))))),33)) when "1010",
+std_logic_vector((port1(31) & signed(port1)) nor (port2(31) & signed(port2))) when "1100",
+std_logic_vector((port1(31) & signed(port1)) nand (port2(31) & signed(port2))) when others;
+flags_alu(3) <= c1(31);
+flags_alu(2) <= '1' when c1(31 downto 0) = b"0000_0000_0000_0000_0000_0000_0000_0000" else '0';
+flags_alu(1) <= c1(32);
+flags_alu(0) <= ((((port1(31) and (port2(31))) and (not(c1(31))))) or ((((not(port1(31))) and (not(port2(31)))) and c1(31))));
+ALUout <= c1(31 downto 0);
+
+
+
+end Behavioral;
