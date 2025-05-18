@@ -1,0 +1,19 @@
+ addi r8,r8,21
+ addi r2,r2,0
+
+Counter:
+ addi r4,r4,7
+ sub r8,r8,r4
+ bne r8,r2,Counter
+
+ j End
+
+ add r6,r9,r15
+ sub r22,r30,r13
+
+End:
+ sll r4,r4,1
+ andi r6,r4,20
+ sw r6,r4
+ sub r12,r4,r6
+ lw r14,8[r6]
