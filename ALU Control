@@ -1,0 +1,50 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity ALU_control is
+  Port (ALUOp_in : in std_logic_vector(1 downto 0);
+        inst_ALU_con : in std_logic_vector(5 downto 0);
+        ALUcontrol_out : out std_logic_vector(3 downto 0));
+end ALU_control;
+
+architecture Behavioral of ALU_control is
+
+begin
+
+
+ALUcontrol_out <= 
+  -- ALUOp = "00" (lw, sw): add
+  "0010" when ALUOp_in = "00" else
+
+  -- ALUOp = "01" (beq, bne): subtract
+  "0110" when ALUOp_in = "01" else
+
+  -- ALUOp = "10": R-type, determined by funct field
+  "0010" when ALUOp_in = "10" and (inst_ALU_con = "100000" or inst_ALU_con = "100001") else -- add, addu
+  "0110" when ALUOp_in = "10" and (inst_ALU_con = "100010" or inst_ALU_con = "100011") else -- sub, subu
+  "0000" when ALUOp_in = "10" and inst_ALU_con = "100100" else -- and
+  "0001" when ALUOp_in = "10" and inst_ALU_con = "100101" else -- or
+  "1100" when ALUOp_in = "10" and inst_ALU_con = "100111" else -- nor
+  "0111" when ALUOp_in = "10" and (inst_ALU_con = "101010" or inst_ALU_con = "101011") else -- slt, sltu
+  "1000" when ALUOp_in = "10" and inst_ALU_con = "000000" else -- sll
+  "1001" when ALUOp_in = "10" and inst_ALU_con = "000010" else -- srl
+  "1010" when ALUOp_in = "10" and inst_ALU_con = "000011" else -- sra
+  "0000" when ALUOp_in = "10" and inst_ALU_con = "001000" else -- jr
+  -- You may add custom mappings for ALUOp = "11" here if used (e.g., andi, ori, etc.)
+
+  "0000" when ALUOp_in = "11" else
+  -- Default
+  "1111";
+
+
+
+end Behavioral;
