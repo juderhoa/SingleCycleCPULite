@@ -1,0 +1,70 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity CPU_tb is
+--  Port ( );
+end CPU_tb;
+
+architecture Behavioral of CPU_tb is
+component CPU is
+  Port (    clk : in STD_LOGIC;
+            rst : in STD_LOGIC;
+            ins : out STD_LOGIC_VECTOR(31 downto 0);
+            showpc: out STD_LOGIC_VECTOR(8 downto 0);
+            regreadtst1: out STD_LOGIC_VECTOR(31 downto 0);
+            regreadtst2: out STD_LOGIC_VECTOR(31 downto 0);
+            Registerin1: out STD_LOGIC_VECTOR(4 downto 0);
+            Registerin2: out STD_LOGIC_VECTOR(4 downto 0);
+            RegisterWriteto: out STD_LOGIC_VECTOR(4 downto 0);
+            RegisterWriteData: out STD_LOGIC_VECTOR(31 downto 0);
+            port1tst, port2tst:out std_logic_vector(31 downto 0);
+            ALUcontroltst: out std_logic_vector(3 downto 0);
+            ALUouttst: out std_logic_vector(31 downto 0);
+            ALUOp_intst : out std_logic_vector(1 downto 0);
+            memreadtst: out std_logic;
+            memwritetst: out std_logic_vector(0 downto 0);
+            MemDataIntst: out std_logic_vector (31 downto 0);
+            MemDataOuttst: out std_logic_vector(31 downto 0)
+            );
+end component;
+
+signal memwritetst_tb: std_logic_vector(0 downto 0);
+signal clk_tb, rst_tb,memreadtst_tb: std_logic;
+signal ALUOp_intst_tb : std_logic_vector(1 downto 0);
+signal ALUcontroltst_tb: std_logic_vector(3 downto 0);
+signal MemDataIntst_tb,MemDataOuttst_tb,ins_tb, regreadtst1_tb, regreadtst2_tb,RegisterWriteData_tb, port1tst_tb, port2tst_tb,ALUouttst_tb: std_logic_vector(31 downto 0);
+signal showpc_tb: STD_LOGIC_VECTOR(8 downto 0);
+signal Registerin1_tb,Registerin2_tb, RegisterWriteto_tb: STD_LOGIC_VECTOR(4 downto 0);
+begin
+
+uut: CPU port map ( memreadtst => memreadtst_tb,memwritetst => memwritetst_tb,MemDataIntst => MemDataIntst_tb,MemDataOuttst => MemDataOuttst_tb,clk => clk_tb, rst => rst_tb, ins => ins_tb, showpc => showpc_tb,regreadtst1 => regreadtst1_tb,regreadtst2 => regreadtst2_tb,RegisterWriteData => RegisterWriteData_tb,Registerin2 =>Registerin2_tb,Registerin1 => Registerin1_tb,RegisterWriteto => RegisterWriteto_tb, port1tst => port1tst_tb, port2tst => port2tst_tb, ALUcontroltst => ALUcontroltst_tb, ALUouttst => ALUouttst_tb, ALUOp_intst => ALUOp_intst_tb);
+
+process
+begin
+
+rst_tb <= '1';
+wait for 5 ns;
+rst_tb <= '0';
+wait;
+end process;
+
+process
+begin
+clk_tb <= '0';
+wait for 10 ns;
+clk_tb <= '1';
+wait for 10 ns;
+
+
+end process;
+
+end Behavioral;
