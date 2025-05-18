@@ -1,0 +1,175 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity reg_file is
+  Port (clk_r : in STD_LOGIC;
+        rst_r : in STD_LOGIC;
+        RegWrite_r : in STD_LOGIC;
+        read_reg1 : in STD_LOGIC_VECTOR (4 downto 0);
+        read_reg2 : in STD_LOGIC_VECTOR (4 downto 0);
+        write_reg : in STD_LOGIC_VECTOR (4 downto 0);
+        data_read_reg1 : out STD_LOGIC_VECTOR (31 downto 0);
+        data_read_reg2 : out STD_LOGIC_VECTOR (31 downto 0);
+        data_write_reg : in STD_LOGIC_VECTOR (31 downto 0));
+end reg_file;
+
+architecture Behavioral of reg_file is
+
+signal r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19,r20,r21,r22,r23,r24,r25,r26,r27,r28,r29,r30,r31: STD_LOGIC_VECTOR (31 downto 0);
+
+begin
+    process(rst_r, clk_r)
+    begin
+        if rst_r = '1' then
+            r0  <= (others => '0');
+r1  <= (others => '0');
+r2  <= (others => '0');
+r3  <= (others => '0');
+r4  <= (others => '0');
+r5  <= (others => '0');
+r6  <= (others => '0');
+r7  <= (others => '0');
+r8  <= (others => '0');
+r9  <= (others => '0');
+r10 <= (others => '0');
+r11 <= (others => '0');
+r12 <= (others => '0');
+r13 <= (others => '0');
+r14 <= (others => '0');
+r15 <= (others => '0');
+r16 <= (others => '0');
+r17 <= (others => '0');
+r18 <= (others => '0');
+r19 <= (others => '0');
+r20 <= (others => '0');
+r21 <= (others => '0');
+r22 <= (others => '0');
+r23 <= (others => '0');
+r24 <= (others => '0');
+r25 <= (others => '0');
+r26 <= (others => '0');
+r27 <= (others => '0');
+r28 <= (others => '0');
+r29 <= (others => '0');
+r30 <= (others => '0');
+r31 <= (others => '0'); 
+        elsif rising_edge(clk_r) then
+            if RegWrite_r = '1' and rst_r = '0' then
+                case write_reg is
+  when "00000" => r0  <= data_write_reg;
+  when "00001" => r1  <= data_write_reg;
+  when "00010" => r2  <= data_write_reg;
+  when "00011" => r3  <= data_write_reg;
+  when "00100" => r4  <= data_write_reg;
+  when "00101" => r5  <= data_write_reg;
+  when "00110" => r6  <= data_write_reg;
+  when "00111" => r7  <= data_write_reg;
+  when "01000" => r8  <= data_write_reg;
+  when "01001" => r9  <= data_write_reg;
+  when "01010" => r10 <= data_write_reg;
+  when "01011" => r11 <= data_write_reg;
+  when "01100" => r12 <= data_write_reg;
+  when "01101" => r13 <= data_write_reg;
+  when "01110" => r14 <= data_write_reg;
+  when "01111" => r15 <= data_write_reg;
+  when "10000" => r16 <= data_write_reg;
+  when "10001" => r17 <= data_write_reg;
+  when "10010" => r18 <= data_write_reg;
+  when "10011" => r19 <= data_write_reg;
+  when "10100" => r20 <= data_write_reg;
+  when "10101" => r21 <= data_write_reg;
+  when "10110" => r22 <= data_write_reg;
+  when "10111" => r23 <= data_write_reg;
+  when "11000" => r24 <= data_write_reg;
+  when "11001" => r25 <= data_write_reg;
+  when "11010" => r26 <= data_write_reg;
+  when "11011" => r27 <= data_write_reg;
+  when "11100" => r28 <= data_write_reg;
+  when "11101" => r29 <= data_write_reg;
+  when "11110" => r30 <= data_write_reg;
+  when "11111" => r31 <= data_write_reg;
+  when others => r31 <= data_write_reg;
+end case;
+            end if;
+        end if;
+    end process;
+
+    with read_reg1 select
+        data_read_reg1 <= r0 when "00000",
+                         r1 when "00001",
+                         r2 when "00010",
+                         r3 when "00011",
+                         r4 when "00100",
+                         r5 when "00101",
+                         r6 when "00110",
+                         r7 when "00111",
+                         r8 when "01000",
+                         r9 when "01001",
+                         r10 when "01010",
+                         r11 when "01011",
+                         r12 when "01100",
+                         r13 when "01101",
+                         r14 when "01110",
+                         r15 when "01111",
+                         r16 when "10000",
+                         r17 when "10001",
+                         r18 when "10010",
+                         r19 when "10011",
+                         r20 when "10100",
+                         r21 when "10101",
+                         r22 when "10110",
+                         r23 when "10111",
+                         r24 when "11000",
+                         r25 when "11001",
+                         r26 when "11010",
+                         r27 when "11011",
+                         r28 when "11100",
+                         r29 when "11101",
+                         r30 when "11110",
+                         r31 when "11111",
+                         r31 when others;
+
+    with read_reg2 select
+        data_read_reg2 <= r0 when "00000",
+                         r1 when "00001",
+                         r2 when "00010",
+                         r3 when "00011",
+                         r4 when "00100",
+                         r5 when "00101",
+                         r6 when "00110",
+                         r7 when "00111",
+                         r8 when "01000",
+                         r9 when "01001",
+                         r10 when "01010",
+                         r11 when "01011",
+                         r12 when "01100",
+                         r13 when "01101",
+                         r14 when "01110",
+                         r15 when "01111",
+                         r16 when "10000",
+                         r17 when "10001",
+                         r18 when "10010",
+                         r19 when "10011",
+                         r20 when "10100",
+                         r21 when "10101",
+                         r22 when "10110",
+                         r23 when "10111",
+                         r24 when "11000",
+                         r25 when "11001",
+                         r26 when "11010",
+                         r27 when "11011",
+                         r28 when "11100",
+                         r29 when "11101",
+                         r30 when "11110",
+                         r31 when "11111",
+                         r31 when others;
+end Behavioral;
