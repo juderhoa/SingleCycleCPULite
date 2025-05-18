@@ -30,15 +30,16 @@ Instructions are encoded in 32-bit machine code and stored in a ROM-based instru
 
 ```plaintext
 .
-├── alu.vhdl                  # Arithmetic Logic Unit (supports AND, OR, ADD, SUB, SLT, etc.)
-├── alu_control.vhdl          # Determines ALU operation from ALUOp and funct fields
-├── mux_2to1_32bit.vhdl       # 32-bit 2:1 multiplexer
-├── mux_2to1_5bit.vhdl        # 5-bit 2:1 multiplexer (for register selection)
-├── mux_2to1_9bit.vhdl        # 9-bit 2:1 multiplexer (for branch/jump address selection)
-├── control.vhdl              # Main control unit generating control signals based on opcode
-├── register_file.vhdl        # 32-register file supporting simultaneous read and write
-├── rom_generation.vhdl       # Instruction ROM with machine code initialization
-├── ram_generation.vhdl       # Data memory (RAM) for LW and SW instructions
-├── cpu.vhdl                  # Top-level CPU architecture integrating all modules
-├── cpu_tb.vhdl               # VHDL testbench that simulates program execution
-├── cpu_instructions.txt      # Machine-coded MIPS instructions loaded into ROM
+├── 32 Bit MUX                     # 32-bit 2:1 multiplexer
+├── 5 Bit MUX                      # 5-bit 2:1 multiplexer
+├── 9 Bit MUX                      # 9-bit 2:1 multiplexer
+├── ALU                            # Arithmetic Logic Unit
+├── ALU Control                    # Determines ALU operation from ALUOp and funct fields
+├── CPU                            # Top-level CPU architecture integrating all components
+├── CPU Instructions (MIPS)        # Human-readable MIPS instructions
+├── CPU Instructions (Machine Code)# Corresponding machine code for instruction ROM
+├── CPU Testbench                  # VHDL testbench for simulation and validation
+├── Control                        # Main control unit generating control signals
+├── RAM Generation                 # Data memory (RAM) for load/store operations
+├── ROM Generation                 # Instruction memory (ROM)
+├── Register File                  # 32-register file with read/write access
