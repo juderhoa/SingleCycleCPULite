@@ -1,0 +1,84 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity control is
+   Port (clk_c : in STD_LOGIC;
+        rst_c : in STD_LOGIC;
+        inst_31_26 : in STD_LOGIC_VECTOR (5 downto 0);
+        RegDst_c : out STD_LOGIC;
+        Jump_c : out STD_LOGIC;
+        Branch_c : out STD_LOGIC;
+        MemRead_c : out STD_LOGIC;
+        MemtoReg_c : out STD_LOGIC;
+        ALUOp_c : out STD_LOGIC_VECTOR (1 downto 0);
+        MemWrite_c : out STD_LOGIC_VECTOR (0 downto 0);
+        ALUSrc_c : out STD_LOGIC;
+        RegWrite_c : out STD_LOGIC );
+end control;
+
+architecture Behavioral of control is
+    signal RegDst_int, Jump_int, Branch_int, MemRead_int, MemtoReg_int, ALUSrc_int, RegWrite_int : STD_LOGIC;
+    signal ALUOp_int : STD_LOGIC_VECTOR(1 downto 0);
+    signal MemWrite_int : STD_LOGIC_VECTOR(0 downto 0);
+begin
+    RegDst_c <= '0' when rst_c = '1' else RegDst_int;
+    Jump_c <= '0' when rst_c = '1' else Jump_int;
+    Branch_c <= '0' when rst_c = '1' else Branch_int;
+    MemRead_c <= '0' when rst_c = '1' else MemRead_int;
+    MemtoReg_c <= '0' when rst_c = '1' else MemtoReg_int;
+    ALUOp_c <= "00" when rst_c = '1' else ALUOp_int;
+    MemWrite_c <= "0" when rst_c = '1' else MemWrite_int;
+    ALUSrc_c <= '0' when rst_c = '1' else ALUSrc_int;
+    RegWrite_c <= '0' when rst_c = '1' else RegWrite_int;
+
+    with inst_31_26 select
+        RegDst_int <= '1' when "000000",  -- R-type
+                      '0' when others;
+
+    with inst_31_26 select
+        Jump_int <= '1' when "000010" | "000011",  -- J, JAL
+                    '0' when others;
+
+    with inst_31_26 select
+        Branch_int <= '1' when "000100" | "000101" | "000110" | "000111",  -- BEQ, BNE, BLEZ, BGTZ
+                      '0' when others;
+
+    with inst_31_26 select
+        MemRead_int <= '1' when "010000" | "010001" | "010011" | "010100" | "010101" |  -- LB, LH, LW, LBU, LHU
+                                   "100011" | "100100" | "100101",  -- LW, LBU, LHU (alternative encodings)
+                       '0' when others;
+
+    with inst_31_26 select
+        MemtoReg_int <= '1' when "010000" | "010001" | "010011" | "010100" | "010101" |  -- LB, LH, LW, LBU, LHU
+                                   "100011" | "100100" | "100101",  -- LW, LBU, LHU (alternative encodings)
+                        '0' when others;
+
+    with inst_31_26 select
+        ALUOp_int <= "10" when "000000",  -- R-type
+                     "01" when "000100" | "000101" | "000110" | "000111",  -- BEQ, BNE, BLEZ, BGTZ
+                     "11" when "001010" | "001011" | "001100" | "001101" | "001110" | "001111",  -- SLTI, SLTIU, ANDI, ORI, XORI, LUI
+                     "00" when others;
+
+    with inst_31_26 select
+        MemWrite_int <= "1" when "011000" | "011001" | "101011" |  -- SB, SH, SW
+                                   "101000" | "101001",  -- SB, SH (alternative encodings)
+                        "0" when others;
+
+    with inst_31_26 select
+        ALUSrc_int <= '1' when "001000" | "001001" | "001010" | "001011" |  -- ADDI, ADDIU, SLTI, SLTIU
+                                 "001100" | "001101" | "001110" | "001111" |  -- ANDI, ORI, XORI, LUI
+                                 "010000" | "010001" | "010011" | "010100" | "010101" |  -- LB, LH, LW, LBU, LHU
+                                 "011000" | "011001" | "101011" |  -- SB, SH, SW
+                                 "100011" | "100100" | "100101" |  -- LW, LBU, LHU (alternative encodings)
+                                 "101000" | "101001",  -- SB, SH (alternative encodings)
+                      '0' when others;
+
+    with inst_31_26 select
+        RegWrite_int <= '1' when "000000" | "000011" |  -- R-type, JAL
+                                  "001000" | "001001" | "001010" | "001011" |  -- ADDI, ADDIU, SLTI, SLTIU
+                                  "001100" | "001101" | "001110" | "001111" |  -- ANDI, ORI, XORI, LUI
+                                  "010000" | "010001" | "010011" | "010100" | "010101" |  -- LB, LH, LW, LBU, LHU
+                                  "100011" | "100100" | "100101",  -- LW, LBU, LHU (alternative encodings)
+                       '0' when others;
+end Behavioral;
